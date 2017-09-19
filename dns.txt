@@ -1,2 +1,5 @@
-www.google.com 192.168.0.7
-www.yahoo.com 192.168.0.16
+www.google.com 172.217.26.206
+www.yahoo.com 206.190.36.45
+www.iiitdm.ac.in 64.111.105.105
+www.youtube.com 216.58.197.78
+www.reddit.com 151.101.129.140

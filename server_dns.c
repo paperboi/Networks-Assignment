@@ -1,13 +1,14 @@
-#include<stdio.h>
-#include<string.h>
-#include<sys/stat.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<arpa/inet.h>
 
 
-#define PORT 49153
+#define PORT 3000
 
 int main()
 {
@@ -22,16 +23,20 @@ int main()
     perror("\nsocket() failed");
     exit(1);
   }
+  else
+  	printf("\nThe socket was created.");
 
-  server.sin_family=AF_INET;
-  server.sin_port=PORT;
-  server.sin_addr.s_addr=inet_addr("127.0.0.1");
+  server_addr.sin_family=AF_INET;
+  server_addr.sin_port=PORT;
+  server_addr.sin_addr.s_addr=inet_addr("127.0.0.1");
   
-  if (bind(s,(struct sockaddr *)&server_addr,sizeof(server_addr)) < 0)
+  if (bind(sock_fd,(struct sockaddr *)&server_addr,sizeof(server_addr)) < 0)
   {
-    perror("bind() failed\n");
+    perror("bind() failed");
     exit(1);
   }
+  else
+  	printf("\nBinding the socket. ");
   
   client_len=sizeof(client_addr);
   
@@ -45,8 +50,8 @@ int main()
       fscanf(fp,"%s",a);
       if(strcmp(a,buffer1)==0)
       {
-            fscanf(fp,"%s",buffer2);
-            break;
+        fscanf(fp,"%s",buffer2);
+        break;
       }
     }
     if(strcmp(buffer2,"")==0)
