@@ -12,6 +12,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>	
+#include <string.h>
 
 #define PORTNO 80
 #define BACKLOG 10
@@ -82,7 +83,7 @@ int main()
 			close(sock_fd);
 			recv(new_sock_fd, buffer, BUFFERSIZE, 0);
 			printf("\n%s\n", buffer);
-			write(new_sock_fd,webpage,sizeof(webpage)-1);
+			write(new_sock_fd,buffer,strlen(buffer));
 			exit(0);
 			close(new_sock_fd);
 		}
