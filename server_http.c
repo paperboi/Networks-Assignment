@@ -12,21 +12,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>	
-#include <string.h>
 
-#define PORTNO 80
+#define PORTNO 8080
 #define BACKLOG 10
-#define BUFFERSIZE 1024
-
-char webpage[]=
-	"HTTP/1.1 200 OK\r\n"
-	"Content-Type: text/html; charset=UTF-8\r\n\r\n"
-	"<!DOCTYPE html>\r\n"
-	"<html><head><title>HTTP SERVER</title>\r\n"
-	"<style>body {background-color: #FFFF00 } </style></head>\r\n"
-	"<body><center><h1>Welcome to a simple HTTP GET server </h1><br>\r\n"
-	"</center></body></html>\r\n";
-
 
 int main()
 {
@@ -36,7 +24,8 @@ int main()
 	socklen_t client_len;	//To store length of client ip address
 
 	pid_t pid;
-	char *buffer=malloc(BUFFERSIZE);
+	int buffer_size=512;
+	char *buffer=malloc(buffer_size);
 
 	//Creating a socket
 	if ((sock_fd=socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -81,9 +70,9 @@ int main()
 		if (pid==0)
 		{
 			close(sock_fd);
-			recv(new_sock_fd, buffer, BUFFERSIZE, 0);
+			recv(new_sock_fd, buffer, buffer_size, 0);
 			printf("\n%s\n", buffer);
-			write(new_sock_fd,buffer,strlen(buffer));
+			write(new_sock_fd, "Message recieved!\n", 47);
 			exit(0);
 			close(new_sock_fd);
 		}
