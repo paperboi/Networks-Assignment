@@ -12,9 +12,19 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>	
+#include <string.h>
 
-#define PORTNO 8080
+#define PORTNO 80
 #define BACKLOG 10
+
+char webpage[]=
+ 	"HTTP/1.1 200 OK\r\n"
+ 	"Content-Type: text/html; charset=UTF-8\r\n\r\n"
+ 	"<!DOCTYPE html>\r\n"
+ 	"<html><head><title>HTTP SERVER by Jeffrey Jacob, CED15I036</title>\r\n"
+ 	"<style>body {background-color: #FFFFFF } </style></head>\r\n"
+ 	"<body><center><h1>Welcome to a simple HTTP GET server</h1><br>\r\n"
+ 	"</center></body></html>\r\n";
 
 int main()
 {
@@ -44,15 +54,15 @@ int main()
 	if (bind(sock_fd,(struct sockaddr *) &server_addr, sizeof(server_addr)) == 0)
 		printf("\nBinding the socket");
 	fflush(stdout);
+	
+	//Listening to incoming connections
+	if(listen(sock_fd, BACKLOG) < 0)
+	{
+		perror("\nlisten() failed");
+		exit(1);
+	}
 	while(1)
 	{
-		//Listening to incoming connections
-		if(listen(sock_fd, BACKLOG) < 0)
-		{
-			perror("\nlisten() failed");
-			exit(1);
-		}
-
 		client_len=sizeof(client_addr);
 
 		//Accepting the client connection
@@ -72,8 +82,9 @@ int main()
 			close(sock_fd);
 			recv(new_sock_fd, buffer, buffer_size, 0);
 			printf("\n%s\n", buffer);
-			write(new_sock_fd, "Message recieved!\n", 47);
-			exit(0);
+			write(new_sock_fd,webpage,sizeof(webpage)-1);
+ 			write(new_sock_fd,buffer,strlen(buffer));
+ 			// exit(0);
 			close(new_sock_fd);
 		}
 		else
